@@ -3,11 +3,11 @@
 const app = require('express')();
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const authRouter = require('route/auth-routes');
+const authRouter = require('./route/auth-routes');
 
-mongoose.connection('mongodb://localhost/dev_db');
+mongoose.connect('mongodb://localhost/dev_db');
 
-app.use('*', morgan);
+app.use(morgan('tiny'));
 
 app.use('/', authRouter);
 
