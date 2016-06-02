@@ -15,7 +15,7 @@ require('../server');
 describe('unit tests', () => {
 
   it('should decode a basic auth string into username and password', () => {
-    
+
     let baseString = new Buffer('user:pass').toString('base64');
     let authString = 'Basic ' + baseString;
     let req = {
@@ -60,6 +60,20 @@ describe('auth tests', () => {
       expect(err).to.eql(null);
       expect(res).to.have.status(200);
       expect(res.body).to.eql({token: 'access granted'});
+      done();
+    });
+  });
+});
+
+describe('catch all test', () => {
+
+  it('should give an error for unsupported routes', (done) => {
+    request('localhost:3000')
+    .get('/test')
+    .end((err, res) => {
+      expect(err).to.not.eql(null);
+      expect(res).to.have.status(404);
+      expect(res.body).to.eql({message: 'Not found'});
       done();
     });
   });
