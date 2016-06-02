@@ -8,6 +8,7 @@ const User = new mongoose.Schema({
   password: {type: String, required: true}
 });
 
+// try making async using a promise or a callback
 User.methods.hashPassword = function() {
   return bcrypt.hashSync(this.password, 8);
 };
