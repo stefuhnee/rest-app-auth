@@ -15,8 +15,8 @@ require('../server');
 describe('unit tests', () => {
 
   it('should decode a basic auth string into username and password', () => {
-
-    let baseString = new Buffer('testusername:testpassword').toString('base64');
+    
+    let baseString = new Buffer('user:pass').toString('base64');
     let authString = 'Basic ' + baseString;
     let req = {
       headers:
@@ -26,8 +26,7 @@ describe('unit tests', () => {
     };
 
     getBasic(req, {}, () => {
-      expect(req.auth).to.eql({username: 'testusername', password: 'testpassword'});
-      
+      expect(req.auth).to.eql({username: 'user', password: 'pass'});
     });
   });
 });
@@ -37,6 +36,30 @@ describe('auth tests', () => {
   after((done)=> {
     process.env.MONGOLAB_URI = dbPort;
     mongoose.connection.db.dropDatabase(() => {
+      done();
+    });
+  });
+
+  it('should sign up a new user', (done) => {
+    request('localhost:3000')
+    .post('/signup')
+    .send({username:'test', password:'test'})
+    .end((err, res) => {
+      expect(err).to.eql(null);
+      expect(res).to.have.status(200);
+      expect(res.body).to.eql({token: 'access granted'});
+      done();
+    });
+  });
+
+  it('should sign in a user with a token', (done) => {
+    request('localhost:3000')
+    .get('/signin')
+    .auth('test', 'test')
+    .end((err, res) => {
+      expect(err).to.eql(null);
+      expect(res).to.have.status(200);
+      expect(res.body).to.eql({token: 'access granted'});
       done();
     });
   });

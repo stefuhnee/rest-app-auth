@@ -7,6 +7,7 @@ const User = require('../model/user');
 const router = express.Router();
 
 router.get('/signin', getBasic, (req, res, next) => {
+  console.log(req.auth);
   let username = req.auth.username;
   User.findOne({username}, (err, user) => {
     if (err || !user) return next(new Error('Cannot find user'));
@@ -20,7 +21,7 @@ router.get('/signin', getBasic, (req, res, next) => {
 router.post('/signup', bodyParser, (req, res, next) => {
   let newUser = new User(req.body);
   let username = newUser.username;
-  newUser.password = newUser.hashPassword;
+  newUser.password = newUser.hashPassword();
   req.body.password = null;
   User.findOne({username}, (err, user) => {
     if (err || user) return next(new Error('Cannot create user'));
