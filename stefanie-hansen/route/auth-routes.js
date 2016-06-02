@@ -6,7 +6,7 @@ const getBasic = require('../lib/get-basic');
 const User = require('../model/user');
 const router = express.Router();
 
-router.get('/signin', getBasic, (req, res, next) => {
+router.get('/login', getBasic, (req, res, next) => {
   let username = req.auth.username;
   User.findOne({username}, (err, user) => {
     if (err || !user) return next(new Error('Cannot find user'));
