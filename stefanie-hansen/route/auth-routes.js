@@ -7,7 +7,6 @@ const User = require('../model/user');
 const router = express.Router();
 
 router.get('/signin', getBasic, (req, res, next) => {
-  console.log(req.auth);
   let username = req.auth.username;
   User.findOne({username}, (err, user) => {
     if (err || !user) return next(new Error('Cannot find user'));
