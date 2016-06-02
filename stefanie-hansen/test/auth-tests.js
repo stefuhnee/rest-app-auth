@@ -54,7 +54,7 @@ describe('auth tests', () => {
 
   it('should sign in a user with a token', (done) => {
     request('localhost:3000')
-    .get('/signin')
+    .get('/login')
     .auth('test', 'test')
     .end((err, res) => {
       expect(err).to.eql(null);
